@@ -1,0 +1,67 @@
+name: Daily Bradbury text
+
+on:
+  schedule:
+    # GitHub schedules run on UTC and ignore daylight saving, so there are two runs.
+    # With --not-before 17:30 below, whichever lands at 5:30 PM local time sends,
+    # and the other skips ("too early" or "already sent today").
+    # These two times are for US Eastern; change them (and BRADBURY_TIMEZONE) for yours.
+    - cron: "30 21 * * *"   # 5:30 PM EDT (summer)
+    - cron: "30 22 * * *"   # 5:30 PM EST (winter)
+  workflow_dispatch:         # adds a "Run workflow" button on the Actions tab
+    inputs:
+      mode:
+        description: "dry-run = just show the text; send = really text it now"
+        type: choice
+        options: [dry-run, send]
+        default: dry-run
+
+permissions:
+  contents: write            # lets the job commit state.json (day counter + reading log)
+
+concurrency:
+  group: bradbury
+  cancel-in-progress: false
+
+jobs:
+  send:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    env:
+      BRADBURY_TIMEZONE: America/New_York
+      BRADBURY_DELIVERY_METHOD: ${{ vars.DELIVERY_METHOD || 'twilio' }}
+      TWILIO_ACCOUNT_SID: ${{ secrets.TWILIO_ACCOUNT_SID }}
+      TWILIO_AUTH_TOKEN: ${{ secrets.TWILIO_AUTH_TOKEN }}
+      TWILIO_FROM_NUMBER: ${{ secrets.TWILIO_FROM_NUMBER }}
+      BRADBURY_TO_NUMBER: ${{ secrets.BRADBURY_TO_NUMBER }}
+      SMTP_USERNAME: ${{ secrets.SMTP_USERNAME }}
+      SMTP_PASSWORD: ${{ secrets.SMTP_PASSWORD }}
+      BRADBURY_TO_ADDRESS: ${{ secrets.BRADBURY_TO_ADDRESS }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Pick tonight's reading and text it
+        run: |
+          if [ "${{ github.event_name }}" = "schedule" ]; then
+            python bradbury.py --not-before 17:30
+          elif [ "${{ inputs.mode }}" = "send" ]; then
+            python bradbury.py
+          else
+            python bradbury.py --dry-run
+          fi
+
+      - name: Save the day counter and reading log
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          if [ -f state.json ]; then git add state.json; fi
+          if git diff --cached --quiet; then
+            echo "Nothing new to save."
+          else
+            git commit -m "Log reading for $(date -u +%F)"
+            git push
+          fi

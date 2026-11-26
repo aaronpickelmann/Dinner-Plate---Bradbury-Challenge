@@ -1,0 +1,25 @@
+{
+  "_comment": "Copy this file to config.json and fill it in. Secrets can go in environment variables instead (TWILIO_ACCOUNT_SID, TWILIO_AUTH_TOKEN, TWILIO_FROM_NUMBER, BRADBURY_TO_NUMBER, SMTP_USERNAME, SMTP_PASSWORD, BRADBURY_TO_ADDRESS); env vars win over this file.",
+
+  "delivery_method": "twilio",
+
+  "twilio": {
+    "account_sid": "ACxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+    "auth_token": "",
+    "from_number": "+15550001111",
+    "to_number": "+15552223333"
+  },
+
+  "email": {
+    "smtp_host": "smtp.gmail.com",
+    "smtp_port": 587,
+    "username": "you@gmail.com",
+    "password": "",
+    "from_address": "",
+    "to_address": "5552223333@tmomail.net"
+  },
+
+  "timezone": "America/New_York",
+  "max_consecutive_service_days": 2,
+  "message_cooldown_days": 14
+}

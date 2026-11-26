@@ -1,0 +1,154 @@
+{
+  "_comment": "Each category lists the services it can pick from. type 'rss' = RSS/Atom feed, 'html' = scrape links from a page. A '{page}' in the url means a random archive page between first_page and max_page is used each day. Filters: link_pattern / exclude_link_pattern (regex on the link), exclude_title_pattern (regex on the title), require_categories / exclude_categories (feed tags). Set \"enabled\": false to turn a service off. Run `python bradbury.py --check-sources` after editing.",
+
+  "Short Story": [
+    {
+      "name": "Clarkesworld",
+      "type": "rss",
+      "url": "https://clarkesworldmagazine.com/feed/?paged={page}",
+      "max_page": 40,
+      "require_categories": ["fiction", "text"]
+    },
+    {
+      "name": "Strange Horizons",
+      "type": "rss",
+      "url": "https://strangehorizons.com/category/fiction/feed/?paged={page}",
+      "max_page": 50,
+      "exclude_categories": ["Podcasts"],
+      "exclude_title_pattern": "^Podcast"
+    },
+    {
+      "name": "Lightspeed",
+      "type": "rss",
+      "url": "http://feeds.feedburner.com/LightspeedMagazine",
+      "require_categories": ["Fiction"],
+      "exclude_categories": ["Nonfiction", "Author Spotlights", "Book Reviews", "Editorials"]
+    },
+    {
+      "name": "Beneath Ceaseless Skies",
+      "type": "html",
+      "url": "https://www.beneath-ceaseless-skies.com/issues/{page}/",
+      "first_page": 2009,
+      "max_page": 2026,
+      "link_pattern": "beneath-ceaseless-skies\\.com/stories/[^/#]+/?$"
+    },
+    {
+      "name": "The Dark",
+      "type": "rss",
+      "url": "https://www.thedarkmagazine.com/feed/?paged={page}",
+      "max_page": 30,
+      "require_categories": ["Fiction"],
+      "exclude_title_pattern": "^Four Questions"
+    },
+    {
+      "name": "Nightmare Magazine",
+      "type": "html",
+      "url": "https://www.nightmare-magazine.com/category/fiction/page/{page}/",
+      "max_page": 60,
+      "link_pattern": "nightmare-magazine\\.com/fiction/[^/#]+/?$",
+      "title_from_url": true
+    },
+    {
+      "name": "Uncanny Magazine",
+      "type": "rss",
+      "url": "https://www.uncannymagazine.com/feed/?paged={page}",
+      "max_page": 40,
+      "link_pattern": "uncannymagazine\\.com/article/",
+      "exclude_link_pattern": "interview|podcast|uncanny-valley|patreon",
+      "exclude_categories": ["Blog", "News"],
+      "exclude_title_pattern": "Podcast|Interview|Uncanny Valley|Thank You|Patreon|Table of Contents|Eligibility|Kickstarter|Celebrates|Locus|Hugo|Nebula|Award"
+    }
+  ],
+
+  "Poem": [
+    {
+      "name": "Poets.org",
+      "type": "html",
+      "url": "https://poets.org/poems?page={page}",
+      "first_page": 0,
+      "max_page": 800,
+      "link_pattern": "poets\\.org/poem/"
+    },
+    {
+      "name": "Strange Horizons Poetry",
+      "type": "rss",
+      "url": "https://strangehorizons.com/category/poetry/feed/?paged={page}",
+      "max_page": 60,
+      "exclude_categories": ["Podcasts"],
+      "exclude_title_pattern": "^Podcast"
+    },
+    {
+      "name": "Poetry Daily",
+      "type": "html",
+      "url": "https://poems.com/",
+      "link_pattern": "poems\\.com/poem/"
+    }
+  ],
+
+  "Essay": [
+    {
+      "name": "The Marginalian",
+      "type": "rss",
+      "url": "https://www.themarginalian.org/feed/?paged={page}",
+      "max_page": 300
+    },
+    {
+      "name": "Paul Graham",
+      "type": "rss",
+      "url": "http://www.aaronsw.com/2002/feeds/pgessays.rss"
+    },
+    {
+      "name": "Aeon",
+      "type": "rss",
+      "url": "https://aeon.co/feed.rss",
+      "link_pattern": "aeon\\.co/essays/"
+    },
+    {
+      "name": "Psyche",
+      "type": "rss",
+      "url": "https://psyche.co/feed.rss",
+      "link_pattern": "psyche\\.co/ideas/"
+    },
+    {
+      "name": "Arts & Letters Daily",
+      "type": "rss",
+      "url": "https://www.aldaily.com/feed/"
+    },
+    {
+      "name": "Substack",
+      "_comment": "One of these publications is picked at random each time. Add or swap in your favorites (any Substack's address + /feed).",
+      "type": "rss",
+      "urls": [
+        "https://www.experimental-history.com/feed",
+        "https://theconvivialsociety.substack.com/feed",
+        "https://www.henrikkarlsson.xyz/feed",
+        "https://www.honest-broker.com/feed",
+        "https://www.astralcodexten.com/feed"
+      ]
+    }
+  ],
+
+  "Screenplay": [
+    {
+      "name": "IMSDb",
+      "type": "html",
+      "url": "https://imsdb.com/all-scripts.html",
+      "link_pattern": "imsdb\\.com/Movie%20Scripts/",
+      "move_trailing_article": true
+    },
+    {
+      "name": "Daily Script",
+      "type": "html",
+      "url": "https://www.dailyscript.com/movie.html",
+      "link_pattern": "dailyscript\\.com/scripts/"
+    },
+    {
+      "name": "Script Slug",
+      "_comment": "Films plus TV pilots; later TV episodes (e.g. -205-) are skipped.",
+      "type": "sitemap",
+      "url": "https://www.scriptslug.com/sitemap-scripts.xml",
+      "link_pattern": "scriptslug\\.com/script/",
+      "exclude_link_pattern": "-(?!101-)\\d{3}-"
+    }
+  ]
+}

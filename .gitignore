@@ -1,0 +1,6 @@
+# Your phone number and passwords live here; never commit it.
+config.json
+
+bradbury.log
+__pycache__/
+*.tmp

@@ -1,0 +1,102 @@
+# Bradbury Challenge daily texter
+
+Ray Bradbury told young writers to read one short story, one poem and one essay every night for 1,000 nights.
+This project picks your reading for you (plus a screenplay) and texts it to your phone every evening.
+It runs free on GitHub Actions, so your computer doesn't need to be on.
+
+```
+Day 12
+Find one line tonight you wish you'd written.
+
+Short Story: Possession (Beneath Ceaseless Skies)
+https://beneath-ceaseless-skies.com/stories/possession/
+
+Poem: To My Brother Miguel (Poets.org)
+https://poets.org/poem/my-brother-miguel
+
+Essay: How Patterns Change (The Marginalian)
+https://www.themarginalian.org/...
+
+Screenplay: Hacksaw Ridge (2016) (Script Slug)
+https://www.scriptslug.com/script/hacksaw-ridge-2016
+```
+
+## What it does
+
+- Picks a random **service** for each category from [`services.json`](services.json). The same service is never used more than 2 days in a row for a category.
+- Grabs a random piece from that service. **A piece is never sent twice.**
+- Adds a random encouragement from [`messages.json`](messages.json). **The same message won't repeat within 14 days.**
+- Keeps a **Day N** counter, and texts it all to you.
+
+Sources include Clarkesworld, Strange Horizons, Lightspeed, Beneath Ceaseless Skies, The Dark, Nightmare, Uncanny,
+Poets.org, Poetry Daily, The Marginalian, Paul Graham, Aeon, Psyche, Arts & Letters Daily, several Substacks,
+IMSDb, Daily Script and Script Slug.
+
+## Get your own copy (no coding needed)
+
+1. **Copy the repo.** Click **Fork** (top right of this page) to get your own copy.
+2. **Clear the previous owner's progress.** In your copy, delete `state.json` if it's there: open it, click the
+   trash-can icon, then **Commit changes**. That file is the day counter and reading log, and it's recreated on your first send.
+3. **Get a way to text yourself.** Sign up at [twilio.com](https://www.twilio.com) and get a phone number.
+   You'll need your **Account SID**, **Auth Token** and that **Twilio number**.
+   In the US, Twilio requires a quick toll-free verification or A2P 10DLC registration before texts go through.
+4. **Add your secrets.** In your copy go to **Settings → Secrets and variables → Actions → New repository secret**
+   and add each of these. Secrets are encrypted, and nobody (including people viewing your public repo) can see them.
+
+   | Secret name | Value |
+   |---|---|
+   | `TWILIO_ACCOUNT_SID` | starts with `AC...` |
+   | `TWILIO_AUTH_TOKEN` | from the Twilio console |
+   | `TWILIO_FROM_NUMBER` | your Twilio number, like `+15550001111` |
+   | `BRADBURY_TO_NUMBER` | your cell, like `+15552223333` |
+
+5. **Set your timezone.** Open [`.github/workflows/daily.yml`](.github/workflows/daily.yml) and click the pencil icon.
+   Change `BRADBURY_TIMEZONE` ([list of names](https://en.wikipedia.org/wiki/List_of_tz_database_time_zones)),
+   and the two `cron` times, which are in UTC. The defaults send at 5:30 PM US Eastern.
+6. **Turn on Actions.** Forks start with Actions off: open the **Actions** tab and click the green button to enable them.
+7. **Test it.** Go to **Actions → Daily Bradbury text → Run workflow**:
+   - Choose `dry-run` to see the text in the log without sending it.
+   - Choose `send` to really text yourself.
+
+That's it. It runs every evening on its own.
+
+> **Prefer email?** Add a repository *variable* (same page, **Variables** tab) named `DELIVERY_METHOD` with value `email`.
+> Then add the secrets `SMTP_USERNAME` (your Gmail address), `SMTP_PASSWORD` (a Gmail
+> [app password](https://myaccount.google.com/apppasswords)) and `BRADBURY_TO_ADDRESS`.
+> That can be any inbox, or your carrier's email-to-text address, though those are unreliable.
+
+## Things to know
+
+- **The run time isn't exact.** GitHub's scheduled runs can start 5 to 30 minutes late when their servers are busy.
+- **Your reading log is public.** After each send, the workflow saves `state.json` back to the repo: day counter,
+  everything you've been sent, and which messages were used. It contains no phone numbers or passwords.
+- **Already partway through the challenge?** After your first send, edit `"day"` in `state.json`.
+- **Scheduled runs keep going.** GitHub pauses schedules on repos with no activity for 60 days, but the daily save
+  of `state.json` counts as activity.
+
+## Customizing
+
+- **Messages:** edit [`messages.json`](messages.json). Keep at least 15 so the 14-day rule always has options.
+  You can put `{day}` in a message to insert the day number.
+- **Sources:** edit [`services.json`](services.json). Each service has a `name`, a `type` (`rss`, `html` or `sitemap`)
+  and a `url`:
+  - Put `{page}` in the URL with a `max_page` to pull from a random page of the site's archive. This gives much more variety than recent posts.
+  - Use `urls` (a list) instead of `url` to pick one at random. The Substack entry works this way, so swap in your favorite Substacks.
+  - `link_pattern`, `exclude_link_pattern` and `exclude_title_pattern` are regexes for filtering.
+  - `require_categories` and `exclude_categories` filter feed posts by their tags.
+  - Set `title_from_url` when a page's link text is useless (like "Read").
+  - Set `"enabled": false` to turn a service off.
+  - Keep at least 2 services per category.
+
+## Running it on your own computer instead
+
+Needs Python 3.9+ and nothing else.
+
+```
+python bradbury.py --check-sources   # test every source
+python bradbury.py --dry-run         # show tonight's text without sending
+python bradbury.py                   # send it
+```
+
+Settings go in `config.json`. Copy [`config.example.json`](config.example.json); it's git-ignored, so it never gets
+uploaded. To run it daily, use Task Scheduler (Windows) or cron (Mac/Linux).
