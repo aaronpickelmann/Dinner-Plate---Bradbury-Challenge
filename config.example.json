@@ -1,7 +1,12 @@
 {
-  "_comment": "Copy this file to config.json and fill it in. Secrets can go in environment variables instead (TWILIO_ACCOUNT_SID, TWILIO_AUTH_TOKEN, TWILIO_FROM_NUMBER, BRADBURY_TO_NUMBER, SMTP_USERNAME, SMTP_PASSWORD, BRADBURY_TO_ADDRESS); env vars win over this file.",
+  "_comment": "Copy this file to config.json and fill it in. delivery_method is 'ntfy' (free push notifications), 'twilio' (SMS) or 'email'. Secrets can go in environment variables instead (NTFY_TOPIC, TWILIO_ACCOUNT_SID, TWILIO_AUTH_TOKEN, TWILIO_FROM_NUMBER, BRADBURY_TO_NUMBER, SMTP_USERNAME, SMTP_PASSWORD, BRADBURY_TO_ADDRESS); env vars win over this file.",
 
-  "delivery_method": "twilio",
+  "delivery_method": "ntfy",
+
+  "ntfy": {
+    "topic": "bradbury-pick-a-long-random-name-here",
+    "server": "https://ntfy.sh"
+  },
 
   "twilio": {
     "account_sid": "ACxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",

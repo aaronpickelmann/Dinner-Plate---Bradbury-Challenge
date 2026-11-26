@@ -1,7 +1,7 @@
 # Bradbury Challenge daily texter
 
 Ray Bradbury told young writers to read one short story, one poem and one essay every night for 1,000 nights.
-This project picks your reading for you (plus a screenplay) and texts it to your phone every evening.
+This project picks your reading for you (plus a screenplay) and sends it to your phone every evening as a free push notification (or a text, or an email).
 It runs free on GitHub Actions, so your computer doesn't need to be on.
 
 ```
@@ -37,18 +37,14 @@ IMSDb, Daily Script and Script Slug.
 1. **Copy the repo.** Click **Fork** (top right of this page) to get your own copy.
 2. **Clear the previous owner's progress.** In your copy, delete `state.json` if it's there: open it, click the
    trash-can icon, then **Commit changes**. That file is the day counter and reading log, and it's recreated on your first send.
-3. **Get a way to text yourself.** Sign up at [twilio.com](https://www.twilio.com) and get a phone number.
-   You'll need your **Account SID**, **Auth Token** and that **Twilio number**.
-   In the US, Twilio requires a quick toll-free verification or A2P 10DLC registration before texts go through.
-4. **Add your secrets.** In your copy go to **Settings → Secrets and variables → Actions → New repository secret**
-   and add each of these. Secrets are encrypted, and nobody (including people viewing your public repo) can see them.
-
-   | Secret name | Value |
-   |---|---|
-   | `TWILIO_ACCOUNT_SID` | starts with `AC...` |
-   | `TWILIO_AUTH_TOKEN` | from the Twilio console |
-   | `TWILIO_FROM_NUMBER` | your Twilio number, like `+15550001111` |
-   | `BRADBURY_TO_NUMBER` | your cell, like `+15552223333` |
+3. **Get the free ntfy app** ([Android](https://play.google.com/store/apps/details?id=io.heckel.ntfy) /
+   [iPhone](https://apps.apple.com/us/app/ntfy/id1625396347)), with no account needed.
+   - Make up a long, random **topic name**, like `bradbury-k7q2m9xw4t`.
+   - In the app, tap **+** and subscribe to that topic.
+   - Anyone who knows the name can read your notifications, so make it hard to guess.
+4. **Add your topic as a secret.** In your copy go to **Settings → Secrets and variables → Actions → New repository secret**.
+   Set the name to `NTFY_TOPIC` and the value to your topic name. Secrets are encrypted, and nobody (including people
+   viewing your public repo) can see them.
 
 5. **Set your timezone.** Open [`.github/workflows/daily.yml`](.github/workflows/daily.yml) and click the pencil icon.
    Change `BRADBURY_TIMEZONE` ([list of names](https://en.wikipedia.org/wiki/List_of_tz_database_time_zones)),
@@ -60,7 +56,12 @@ IMSDb, Daily Script and Script Slug.
 
 That's it. It runs every evening on its own.
 
-> **Prefer email?** Add a repository *variable* (same page, **Variables** tab) named `DELIVERY_METHOD` with value `email`.
+> **Want a real text message instead?** Add a repository *variable* (same page, **Variables** tab) named `DELIVERY_METHOD`
+> with value `twilio`. Then add the secrets `TWILIO_ACCOUNT_SID`, `TWILIO_AUTH_TOKEN`, `TWILIO_FROM_NUMBER` and
+> `BRADBURY_TO_NUMBER` (numbers look like `+15552223333`). Twilio costs a few dollars a month, and in the US it requires
+> toll-free verification or A2P 10DLC registration first.
+>
+> **Prefer email?** Set `DELIVERY_METHOD` to `email` instead.
 > Then add the secrets `SMTP_USERNAME` (your Gmail address), `SMTP_PASSWORD` (a Gmail
 > [app password](https://myaccount.google.com/apppasswords)) and `BRADBURY_TO_ADDRESS`.
 > That can be any inbox, or your carrier's email-to-text address, though those are unreliable.

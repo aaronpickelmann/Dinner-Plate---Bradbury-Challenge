@@ -450,14 +450,39 @@ def send_email(cfg, text, day):
     log.info("Email sent")  # address deliberately not logged (Actions logs can be public)
 
 
+def send_ntfy(cfg, text, day):
+    """Push notification via ntfy (https://ntfy.sh): free, no account. Anyone who knows
+    the topic name can read it, so treat the topic like a password."""
+    topic = setting(cfg, "topic", "NTFY_TOPIC")
+    server = (setting(cfg, "server", "NTFY_SERVER") or "https://ntfy.sh").rstrip("/")
+    token = setting(cfg, "token", "NTFY_TOKEN")  # only for protected/self-hosted topics
+    if not topic:
+        raise RuntimeError("ntfy settings incomplete: need a topic (config.json or NTFY_TOPIC).")
+
+    headers = {"Title": f"Bradbury Challenge - Day {day}", "Tags": "books",
+               "Content-Type": "text/plain; charset=utf-8"}
+    if token:
+        headers["Authorization"] = f"Bearer {token}"
+    req = urllib.request.Request(f"{server}/{urllib.parse.quote(topic)}",
+                                 data=text.encode("utf-8"), method="POST", headers=headers)
+    try:
+        with urllib.request.urlopen(req, timeout=HTTP_TIMEOUT) as resp:
+            log.info("ntfy accepted message: %s", json.load(resp).get("id"))
+    except urllib.error.HTTPError as e:
+        raise RuntimeError(f"ntfy error {e.code}: {e.read().decode(errors='replace')}")
+
+
 def deliver(config, text, day):
-    method = os.environ.get("BRADBURY_DELIVERY_METHOD") or config.get("delivery_method", "twilio")
-    if method == "twilio":
+    method = os.environ.get("BRADBURY_DELIVERY_METHOD") or config.get("delivery_method", "ntfy")
+    if method == "ntfy":
+        send_ntfy(config.get("ntfy", {}), text, day)
+    elif method == "twilio":
         send_twilio(config.get("twilio", {}), text)
     elif method == "email":
         send_email(config.get("email", {}), text, day)
     else:
-        raise RuntimeError(f"Unknown delivery_method {method!r} (use 'twilio' or 'email')")
+        raise RuntimeError(f"Unknown delivery_method {method!r} "
+                           "(use 'ntfy', 'twilio' or 'email')")
 
 
 # --------------------------------------------------------------------------- #
