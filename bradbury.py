@@ -459,7 +459,12 @@ def send_ntfy(cfg, text, day):
     server = (setting(cfg, "server", "NTFY_SERVER") or "https://ntfy.sh").rstrip("/")
     token = setting(cfg, "token", "NTFY_TOKEN")  # only for protected/self-hosted topics
     if not topic:
-        raise RuntimeError("ntfy settings incomplete: need a topic (config.json or NTFY_TOPIC).")
+        raise RuntimeError("No ntfy topic found. On GitHub, add a repository secret named "
+                           "exactly NTFY_TOPIC (Settings > Secrets and variables > Actions).")
+    if not re.fullmatch(r"[-_A-Za-z0-9]{1,64}", topic):
+        raise RuntimeError(f"The ntfy topic is {len(topic)} characters and contains something "
+                           "ntfy doesn't allow. Use only letters, numbers, - and _ (max 64), "
+                           "with no spaces or quotes.")
 
     headers = {"Title": f"Bradbury Challenge - Day {day}", "Tags": "books",
                "Content-Type": "text/plain; charset=utf-8"}
