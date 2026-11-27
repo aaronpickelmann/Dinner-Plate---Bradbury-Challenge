@@ -2,12 +2,14 @@ name: Daily Bradbury text
 
 on:
   schedule:
-    # GitHub schedules run on UTC and ignore daylight saving, so there are two runs.
-    # With --not-before 17:30 below, whichever lands at 5:30 PM local time sends,
-    # and the other skips ("too early" or "already sent today").
-    # These two times are for US Eastern; change them (and BRADBURY_TIMEZONE) for yours.
-    - cron: "30 21 * * *"   # 5:30 PM EDT (summer)
-    - cron: "30 22 * * *"   # 5:30 PM EST (winter)
+    # GitHub's scheduler is "best effort": runs can start late or be skipped when it's
+    # busy. So this tries every 20 minutes from 21:10 to 23:50 UTC. With --not-before
+    # 17:30 below, runs before 5:30 PM local skip, the first one at or after 5:30 sends,
+    # and the rest skip as "already sent today". Skipped runs take a few seconds and
+    # cost nothing on a public repo. UTC ignores daylight saving; this window covers
+    # 5:30 PM in both EST (22:30 UTC) and EDT (21:30 UTC).
+    # For another timezone, shift the hours (and BRADBURY_TIMEZONE below).
+    - cron: "10,30,50 21-23 * * *"
   workflow_dispatch:         # adds a "Run workflow" button on the Actions tab
     inputs:
       mode:
