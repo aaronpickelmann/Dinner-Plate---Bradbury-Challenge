@@ -1,0 +1,58 @@
+{
+  "day": 1,
+  "last_run_date": "2026-11-26",
+  "used_pieces": [
+    {
+      "category": "Short Story",
+      "service": "Uncanny Magazine",
+      "title": "Theses on the Scientific Management of Goetic Labour",
+      "url": "https://www.uncannymagazine.com/article/theses-on-the-scientific-management-of-goetic-labour/",
+      "day": 1,
+      "date": "2026-11-26"
+    },
+    {
+      "category": "Poem",
+      "service": "Strange Horizons Poetry",
+      "title": "The Schmidt Pain Index: A Love Story",
+      "url": "https://strangehorizons.com/wordpress/poetry/the-schmidt-pain-index-a-love-story/",
+      "day": 1,
+      "date": "2026-11-26"
+    },
+    {
+      "category": "Essay",
+      "service": "Arts & Letters Daily",
+      "title": "The digital humanities promised to save the English department by buying a few computers...",
+      "url": "https://www.chronicle.com/article/the-digital-humanities-was-a-dead-end",
+      "day": 1,
+      "date": "2026-11-26"
+    },
+    {
+      "category": "Screenplay",
+      "service": "IMSDb",
+      "title": "Sphere",
+      "url": "https://imsdb.com/Movie%20Scripts/Sphere%20Script.html",
+      "day": 1,
+      "date": "2026-11-26"
+    }
+  ],
+  "service_history": {
+    "Short Story": [
+      "Uncanny Magazine"
+    ],
+    "Poem": [
+      "Strange Horizons Poetry"
+    ],
+    "Essay": [
+      "Arts & Letters Daily"
+    ],
+    "Screenplay": [
+      "IMSDb"
+    ]
+  },
+  "message_history": [
+    {
+      "message": "You're building a library in your head, one night at a time.",
+      "date": "2026-11-26"
+    }
+  ]
+}
