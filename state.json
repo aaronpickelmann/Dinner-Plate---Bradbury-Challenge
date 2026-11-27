@@ -1,6 +1,6 @@
 {
-  "day": 1,
-  "last_run_date": "2026-11-26",
+  "day": 2,
+  "last_run_date": "2026-11-27",
   "used_pieces": [
     {
       "category": "Short Story",
@@ -33,26 +33,66 @@
       "url": "https://imsdb.com/Movie%20Scripts/Sphere%20Script.html",
       "day": 1,
       "date": "2026-11-26"
+    },
+    {
+      "category": "Short Story",
+      "service": "Lightspeed",
+      "title": "On the Thermodynamics of a Perfect Cup",
+      "url": "https://www.lightspeedmagazine.com/fiction/science-fiction/on-the-thermodynamics-of-a-perfect-cup/",
+      "day": 2,
+      "date": "2026-11-27"
+    },
+    {
+      "category": "Poem",
+      "service": "Strange Horizons Poetry",
+      "title": "Rural Blessings",
+      "url": "https://strangehorizons.com/wordpress/poetry/rural-blessings/",
+      "day": 2,
+      "date": "2026-11-27"
+    },
+    {
+      "category": "Essay",
+      "service": "Arts & Letters Daily",
+      "title": "A man in a gray tartan suit typed away on the Washington DC subway — and so a scheme to...",
+      "url": "https://www.propublica.org/article/dc-metro-smithsonian-american-history-plan",
+      "day": 2,
+      "date": "2026-11-27"
+    },
+    {
+      "category": "Screenplay",
+      "service": "Daily Script",
+      "title": "House Of 1000 Corpses",
+      "url": "https://www.dailyscript.com/scripts/House%20Of%201000%20Corpses.txt",
+      "day": 2,
+      "date": "2026-11-27"
     }
   ],
   "service_history": {
     "Short Story": [
-      "Uncanny Magazine"
+      "Uncanny Magazine",
+      "Lightspeed"
     ],
     "Poem": [
+      "Strange Horizons Poetry",
       "Strange Horizons Poetry"
     ],
     "Essay": [
+      "Arts & Letters Daily",
       "Arts & Letters Daily"
     ],
     "Screenplay": [
-      "IMSDb"
+      "IMSDb",
+      "Daily Script"
     ]
   },
   "message_history": [
     {
       "message": "You're building a library in your head, one night at a time.",
       "date": "2026-11-26"
+    },
+    {
+      "message": "Another night, another armful of words. Enjoy.",
+      "date": "2026-11-27"
     }
   ]
 }
