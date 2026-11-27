@@ -457,6 +457,10 @@ def send_ntfy(cfg, text, day):
     the topic name can read it, so treat the topic like a password."""
     topic = setting(cfg, "topic", "NTFY_TOPIC")
     server = (setting(cfg, "server", "NTFY_SERVER") or "https://ntfy.sh").rstrip("/")
+    if topic and "://" in topic:
+        # Accept a full link copied from the app, e.g. https://ntfy.sh/my-topic
+        p = urllib.parse.urlsplit(topic)
+        server, topic = f"{p.scheme}://{p.netloc}", p.path.strip("/")
     token = setting(cfg, "token", "NTFY_TOKEN")  # only for protected/self-hosted topics
     if not topic:
         raise RuntimeError("No ntfy topic found. On GitHub, add a repository secret named "
@@ -527,6 +531,15 @@ def local_now(config):
     return dt.datetime.now()
 
 
+class _GitHubAnnotations(logging.Handler):
+    """On GitHub Actions, turn warnings/errors into annotations so they show on the
+    run's summary page instead of only 'Process completed with exit code 1'."""
+    def emit(self, record):
+        kind = "error" if record.levelno >= logging.ERROR else "warning"
+        msg = record.getMessage().replace("%", "%25").replace("\r", "%0D").replace("\n", "%0A")
+        print(f"::{kind} title=Bradbury Challenge::{msg}", flush=True)
+
+
 def setup_logging():
     fmt = logging.Formatter("%(asctime)s %(levelname)s %(message)s")
     log.setLevel(logging.INFO)
@@ -536,6 +549,9 @@ def setup_logging():
     sh.setFormatter(fmt)
     log.addHandler(fh)
     log.addHandler(sh)
+    if os.environ.get("GITHUB_ACTIONS") == "true":
+        gh = _GitHubAnnotations(level=logging.WARNING)
+        log.addHandler(gh)
 
 
 def main(argv=None):
