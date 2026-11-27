@@ -68,7 +68,10 @@ That's it. It runs every evening on its own.
 
 ## Things to know
 
-- **The run time isn't exact.** GitHub's scheduled runs can start 5 to 30 minutes late when their servers are busy.
+- **The run time isn't exact.** GitHub's scheduled runs can start late, or be skipped, when their servers are busy.
+  So the workflow tries every 20 minutes from 5:30 PM until about 7 PM, and the first try that runs sends.
+  The rest finish in seconds without sending. Runs before 5:30 show as quick successes too.
+  If nothing arrives, use **Run workflow → send**.
 - **Your reading log is public.** After each send, the workflow saves `state.json` back to the repo: day counter,
   everything you've been sent, and which messages were used. It contains no phone numbers or passwords.
 - **Already partway through the challenge?** After your first send, edit `"day"` in `state.json`.
