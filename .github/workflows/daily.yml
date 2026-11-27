@@ -63,6 +63,6 @@ jobs:
           if git diff --cached --quiet; then
             echo "Nothing new to save."
           else
-            git commit -m "Log reading for $(date -u +%F)"
+            git commit -m "Log reading for $(TZ="$BRADBURY_TIMEZONE" date +%F)"
             git push
           fi
