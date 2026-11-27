@@ -4,7 +4,7 @@
   "delivery_method": "ntfy",
 
   "ntfy": {
-    "topic": "bradbury-kazinsky2013",
+    "topic": "bradbury-pick-a-long-random-name-here",
     "server": "https://ntfy.sh"
   },
 
