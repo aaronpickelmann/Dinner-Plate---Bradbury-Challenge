@@ -384,8 +384,10 @@ def build_text(day, preset, picks):
 # --------------------------------------------------------------------------- #
 
 def setting(cfg, key, env_name):
-    """Environment variable wins over config.json, so secrets can stay out of files."""
-    return os.environ.get(env_name) or cfg.get(key)
+    """Environment variable wins over config.json, so secrets can stay out of files.
+    Stray spaces/newlines from pasting a secret are trimmed."""
+    value = os.environ.get(env_name) or cfg.get(key)
+    return value.strip() if isinstance(value, str) else value
 
 
 def split_for_sms(text, limit=SMS_CHUNK_LIMIT):
